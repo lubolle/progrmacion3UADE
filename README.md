@@ -4,3 +4,5 @@ Estos se encuentran separados de acuerdo a la estragia correspondiendiente, pudi
 * Greedy
 * Programacion dinamica
 * Backtracking
+
+La cursada de esta materia fue en el año 2023 con el docente Ricardo Webhe.
