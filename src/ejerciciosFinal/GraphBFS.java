@@ -54,7 +54,7 @@
         boolean bfs(int startVertex, int goalVertex) {
             Queue<Integer> queue = new LinkedList<>();//Creo una cola
             Set<Integer> visited = new HashSet<>();// creo un conjunto para agregar los visitados
-            Map<Integer, Integer> parent = new HashMap<>();//Es un diccionario que almacena el padre de cada nodo
+            Map<Integer, Integer> parent = new HashMap<>();//Es un diccionario que almacena el padre de cada nodo, esto es para reconstruir el camino
 
             queue.add(startVertex);//Agrego a la cola al primer nodo
             visited.add(startVertex);//Ya lo marco como visitado

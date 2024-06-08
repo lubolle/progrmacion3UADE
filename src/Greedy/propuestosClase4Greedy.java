@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.time.LocalTime;
 import java.util.PriorityQueue;
-
+import java.util.concurrent.LinkedBlockingDeque;
+import DivedAndConquer.mergeSort;
+import DivedAndConquer.quickSort;
 
 import Greedy.ObjetoMochila;
 
@@ -13,7 +15,7 @@ public class propuestosClase4Greedy {
 
     //	Imagine que se encuentra en Thurgau, donde dispone de las siguientes monedas: 5 francos, 2 francos, un franco, 50 centavos (medio franco), 20 centavos, 10 centavos, 5 centavos, y un centavo.
 //	Usted debe pagar 8.78 francos por un paquete de frutillas (un producto típico local), y quiere usar la menor cantidad posible de monedas.
-//	
+//
     //int monedas[] = {500, 200, 100, 50, 10, 1};
     // a pagar 875;
     public void frutillasThuragu(int monedas[], int aPagar) {
@@ -156,10 +158,10 @@ public class propuestosClase4Greedy {
     public int pianoFraileMuerto(Solicitud[] solicitudes) {
         //Voy a devolver el numero de solicitudes que pude meter
         PriorityQueue<Solicitud> colaPrioridad = new PriorityQueue<>();
-        colaPrioridad.addAll(Arrays.asList(solicitudes));//Esta linea es lo mismo que un for que recorra todo el array
+        colaPrioridad.addAll(Arrays.asList(solicitudes));//Esta linea es lo mismo que un for que recorra todo el array O(nlogn)
         Solicitud solicitudDesencolada1 = colaPrioridad.poll();//Poll es logaritmica
         int cantSolicitudesProcesadas = 1;//Aca ya cuento 1 por que ya saco la primera tarea que finaliza antes desde el vamos.
-        while (!colaPrioridad.isEmpty()) {
+        while (!colaPrioridad.isEmpty()) {// O(n log n)
             Solicitud solicitudDesencolada2 = colaPrioridad.poll();
             if (solicitudDesencolada2.horaInicio.isBefore(solicitudDesencolada1.horaFin) || solicitudDesencolada2.horaInicio.equals(solicitudDesencolada1.horaInicio) && solicitudDesencolada2.horaFin.isAfter(solicitudDesencolada1.horaFin))
                 System.out.println("La tarea con hora de inicio: " + solicitudDesencolada2.getHoraInicio() + "y hora fin: " + solicitudDesencolada1.getHoraFin() + "debe ser rechazada");
@@ -169,7 +171,7 @@ public class propuestosClase4Greedy {
             }
             System.out.println("Hora inicio: " + solicitudDesencolada1.getHoraInicio() + " Hora fin: " + solicitudDesencolada1.getHoraFin());
         }
-        return cantSolicitudesProcesadas;
+        return cantSolicitudesProcesadas;//complejidad del algoritmo O(n log n)
     }
 
     public int aulasFraileMuerto(Solicitud[] cursos) {
@@ -188,5 +190,78 @@ public class propuestosClase4Greedy {
         return cantDeAulas;
     }
 
+
+    public void estudianteVago(int[] horasMaterias, int horasParaEstudiar ){
+        int menorHoras = horasMaterias[0];
+
+        while(horasParaEstudiar>0){
+            int indice = 0;
+            for(int i=1; i<horasMaterias.length;i++){//Busco la materias con menos horas.
+                if(menorHoras>horasMaterias[i]){
+                    menorHoras = horasMaterias[i];
+                    indice = i;
+                }
+            }
+            System.out.println("Materia a estudiar: " + indice+  " Cantidad de horas necesarias: " + horasMaterias[indice]);
+            horasParaEstudiar = horasParaEstudiar - horasMaterias[indice];
+            System.out.println("Horas para estudiar restantes: " + horasParaEstudiar);
+            horasMaterias[indice]=9999;// pongo el valor en infinito
+            menorHoras = horasMaterias[indice];
+        }
+
+
+    }
+
+    public int cambioSignoEnArrglo(int[] A, int q) {
+        PriorityQueue<Integer> cola = new PriorityQueue<>();
+        int cambios = 0;
+        for (int i = 0; i < A.length; i++) {
+            cola.add(A[i]);
+        }
+
+        while (cambios != q) {
+            int elemento = cola.remove();
+            elemento = elemento * -1;
+            cola.add(elemento);
+            cambios++;
+
+        }
+
+        int suma = 0;
+
+        for (int i = 0; i < A.length; i++) {
+            suma = suma + cola.remove();
+        }
+        return suma;
+
+    }
+
+    public int buscarLadron (char[] S, int k){
+        int capturas = 0;
+        int posL = BuscarPosi(S,'l',0);
+        int posP = BuscarPosi(S,'p',0);
+        while(posP!=-1 && posL!=-1){
+            if(Math.abs(posL-posP)<k){
+                capturas++;
+                posP = BuscarPosi(S,'p',posP+1);
+                posL = BuscarPosi(S,'l',posL+1);
+            } else if (posP<posL){//Busco otro policia
+                posP = BuscarPosi(S,'p',posP+1);
+            }
+            else
+                posL = BuscarPosi(S,'l',posL+1);
+        }
+        return capturas;
+    }
+
+    private int BuscarPosi(char[] S, char letra,int ultimaPosi ){
+        int i = ultimaPosi;
+        for(i = ultimaPosi;i<S.length;i++){
+            if(S[i]==letra){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }//llave de cierre
